@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form Registrasi Mahasiswa</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #e9ecef;
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      h2 {
+        text-align: center;
+        color: #495057;
+      }
+
+      form {
+        max-width: 400px;
+        width: 100%;
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+      }
+
+      label {
+        font-weight: bold;
+        margin-top: 15px;
+        color: #495057;
+      }
+
+      input {
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0 15px 0;
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        box-sizing: border-box;
+      }
+
+      button {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        width: 100%;
+        margin-top: 20px;
+      }
+
+      button:hover {
+        background-color: #218838;
+      }
+
+      .autocomplete-items {
+        border: 1px solid #ced4da;
+        max-height: 150px;
+        overflow-y: auto;
+        background: white;
+        position: absolute;
+        z-index: 10;
+        width: calc(100% - 42px);
+        margin-top: -15px;
+      }
+
+      .autocomplete-items div {
+        padding: 10px;
+        cursor: pointer;
+      }
+
+      .autocomplete-items div:hover {
+        background-color: #f1f1f1;
+      }
+
+      .warning {
+        color: red;
+        font-size: 0.9em;
+        margin-top: -10px;
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <form id="regForm">
+      <h2>Form Registrasi Mahasiswa</h2>
+      <label for="nama">Nama Mahasiswa</label>
+      <input
+        type="text"
+        id="nama"
+        placeholder="Masukkan nama"
+        autocomplete="off"
+      />
+      <div id="namaWarning" class="warning"></div>
+
+      <label for="nim">NIM</label>
+      <input type="text" id="nim" placeholder="Masukkan NIM" />
+      <div id="nimWarning" class="warning"></div>
+
+      <label for="mataKuliah">Mata Kuliah</label>
+      <input
+        type="text"
+        id="mataKuliah"
+        placeholder="Contoh: Pemrograman Web"
+      />
+      <div id="matkulWarning" class="warning"></div>
+
+      <label for="dosen">Dosen</label>
+      <input type="text" id="dosen" placeholder="Nama Dosen" />
+      <div id="dosenWarning" class="warning"></div>
+
+      <button type="button" onclick="validateForm()">Submit</button>
+    </form>
+
+    <script>
+      const namaList = [
+        "Andi",
+        "Ari",
+        "Agus",
+        "Aulia",
+        "Budi",
+        "Bella",
+        "Bintang",
+        "Citra",
+        "Cahya",
+        "Candra",
+        "Dewi",
+        "Dika",
+        "Doni",
+        "Rahma",
+        "Rani",
+        "Ridwan",
+        "Rizky",
+        "Nanda",
+        "Nurul",
+        "Nina",
+        "Joko",
+        "Jihan",
+        "Jamil",
+        "Sinta",
+        "Sari",
+        "Siti",
+        "Hadi",
+        "Hana",
+        "Hendra",
+        "Eka",
+        "Evi",
+        "Erlangga",
+      ];
+
+      document.getElementById("nama").addEventListener("input", function () {
+        const input = this.value;
+        const autoCompleteBox = document.getElementById("autocomplete-list");
+        autoCompleteBox.innerHTML = "";
+
+        if (!input) return;
+
+        namaList.forEach((name) => {
+          if (name.toLowerCase().startsWith(input.toLowerCase())) {
+            const suggestion = document.createElement("div");
+            suggestion.innerHTML = `<strong>${name.substr(
+              0,
+              input.length
+            )}</strong>${name.substr(input.length)}`;
+            suggestion.addEventListener("click", () => {
+              document.getElementById("nama").value = name;
+              autoCompleteBox.innerHTML = "";
+            });
+            autoCompleteBox.appendChild(suggestion);
+          }
+        });
+      });
+
+      function validateForm() {
+        const nama = document.getElementById("nama").value;
+        const nim = document.getElementById("nim").value;
+        const mataKuliah = document.getElementById("mataKuliah").value;
+        const dosen = document.getElementById("dosen").value;
+
+        const namaWarning = document.getElementById("namaWarning");
+        const nimWarning = document.getElementById("nimWarning");
+        const matkulWarning = document.getElementById("matkulWarning");
+        const dosenWarning = document.getElementById("dosenWarning");
+
+        let valid = true;
+
+        namaWarning.innerText = "";
+        nimWarning.innerText = "";
+        matkulWarning.innerText = "";
+        dosenWarning.innerText = "";
+
+        const simbolRegex = /[^a-zA-Z\s]/;
+        if (simbolRegex.test(nama)) {
+          namaWarning.innerText = "Nama tidak boleh mengandung simbol!";
+          valid = false;
+        }
+        if (simbolRegex.test(mataKuliah)) {
+          matkulWarning.innerText =
+            "Mata Kuliah tidak boleh mengandung simbol!";
+          valid = false;
+        }
+        if (simbolRegex.test(dosen)) {
+          dosenWarning.innerText = "Nama Dosen tidak boleh mengandung simbol!";
+          valid = false;
+        }
+
+        const angkaRegex = /^[0-9]+$/;
+        if (!angkaRegex.test(nim)) {
+          nimWarning.innerText = "NIM harus berupa angka!";
+          valid = false;
+        }
+
+        if (valid) {
+          alert("Form berhasil dikirim!");
+        } else {
+          alert("Periksa input Anda!");
+        }
+      }
+    </script>
+  </body>
+</html>

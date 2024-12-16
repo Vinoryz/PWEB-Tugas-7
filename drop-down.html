@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dynamic Drop Down List</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #e0f7fa;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+
+      .container {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+
+      h1 {
+        color: #00796b;
+        margin-bottom: 20px;
+      }
+
+      .dropdown-container {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      select {
+        padding: 10px;
+        border: 2px solid #00796b;
+        border-radius: 4px;
+        font-size: 16px;
+      }
+
+      select:focus {
+        outline: none;
+        border-color: #004d40;
+        box-shadow: 0 0 5px rgba(0, 77, 64, 0.5);
+      }
+
+      label {
+        font-weight: bold;
+        color: #004d40;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Dynamic Drop Down List dengan JavaScript</h1>
+
+      <div class="dropdown-container">
+        <div>
+          <label for="jenisProduk">Pilih Jenis Produk:</label><br />
+          <select id="jenisProduk" onchange="updateMerk()">
+            <option value="">Pilih Jenis Produk</option>
+            <option value="Desktop">Desktop</option>
+            <option value="Laptop">Laptop</option>
+            <option value="Smartphone">Smartphone</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="merkProduk">Pilih Merk:</label><br />
+          <select id="merkProduk">
+            <option value="">Pilih Merk</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const produkMerk = {
+        Desktop: ["Asus", "Dell", "HP", "Lenovo"],
+        Laptop: ["Apple", "Asus", "Acer", "Microsoft"],
+        Smartphone: ["Samsung", "Apple", "Xiaomi", "Oppo"],
+      };
+
+      function updateMerk() {
+        const jenisProduk = document.getElementById("jenisProduk").value;
+        const merkDropdown = document.getElementById("merkProduk");
+
+        merkDropdown.innerHTML = '<option value="">Pilih Merk</option>';
+
+        if (jenisProduk && produkMerk[jenisProduk]) {
+          produkMerk[jenisProduk].forEach((merk) => {
+            const option = document.createElement("option");
+            option.value = merk;
+            option.textContent = merk;
+            merkDropdown.appendChild(option);
+          });
+        }
+      }
+    </script>
+  </body>
+</html>
